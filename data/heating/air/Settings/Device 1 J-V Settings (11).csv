@@ -1,0 +1,12 @@
+Current Range,0
+Sampling Rate,4096
+Start Voltage (V),-5.0
+End Voltage (V),3.0
+Voltage Increment (V),0.1
+Settle Time (s),0.0
+Illumination (mW/cm^-2),1000.0
+Hysteresis I-V,False
+Pixel Switching,Automated
+Pixels to Measure,[1]
+Pixel Area (cm^2),1.0
+Inverted Device,False
