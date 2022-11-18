@@ -20,31 +20,24 @@ class ElectricalThermalPowerCalculator:
         self.spectral_intensities: Final[pd.DataFrame] = spectral_intensities
         print("aaa")
 
-    def calculate_electrical_power(self):
+    def get_electrical_power(self) -> float:
 
         max_wavelength: Final[int] = len(self.am1_5g_spectra_df.index) - 1 if len(self.am1_5g_spectra_df.index) < 2000 else 2000
         result = integrate.quad(lambda wavelength: self.electrical_power_integral_functions(wavelength), 250, max_wavelength)
-        # p.g. 10 Article 1
-        print(result)
-        pass
+        return result[0]
 
     def electrical_power_integral_functions(self, wavelength: float) -> float:
         return self.phi_am1point5d(wavelength) * self.SR(wavelength) * self.T_liquid(wavelength)
 
-    def calculate_thermal_power(self):
-        #p.g. 10 Article 1
-        pass
+    def get_thermal_power(self, electrical_power: float) -> float:
+        max_wavelength: Final[int] = len(self.am1_5g_spectra_df.index) - 1 if len(
+            self.am1_5g_spectra_df.index) < 2000 else 2000
+        return electrical_power/(integrate.quad(lambda wavelength: self.phi_am1point5d(wavelength), 250, max_wavelength)[0])
 
     def phi_am1point5d(self, wavelength: float) -> float:
         """Photon flux contained in the standardised AM1.5G solar spectrum"""
-        """
-        ratio: Final[float] = wavelength % 1
-        num_1 = self.spectral_response_and_spectra_df.iloc[round(wavelength)]["Spectral Response of solar cell (A W-1)"]
-        num_2 = self.spectral_response_and_spectra_df.iloc[round(wavelength) + 1]["Spectral Response of solar cell (A W-1)"]
-
-        y = ((num_1-num_2)/1)*ratio
-        """
         phi_am1point5d: float = self.spectral_response_and_spectra_df.iloc[round(wavelength)]["Spectral Response of solar cell (A W-1)"]
+
         if isnan(phi_am1point5d):
             return 0
         else:

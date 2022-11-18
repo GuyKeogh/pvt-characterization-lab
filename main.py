@@ -87,13 +87,15 @@ def plot_transmittance_and_get_spectral_intensities() -> pd.DataFrame:
 
 def get_electrical_thermal_powers(spectral_intensities: pd.DataFrame):
     calculator_obj: Final[ElectricalThermalPowerCalculator] = ElectricalThermalPowerCalculator(spectral_intensities=spectral_intensities)
-    calculator_obj.calculate_electrical_power()
+    electrical_power = calculator_obj.get_electrical_power()
+    thermal_power = calculator_obj.get_thermal_power(electrical_power=electrical_power)
+    print(f"Electrical power: {electrical_power}")
+    print(f"Thermal power: {thermal_power}")
     #calculator_obj.plot_phase()
-    #calculator_obj.calculate_thermal_power()
 
 
 if __name__ == "__main__":
-    #plot_characteristics()
+    plot_characteristics()
     spectral_intensities: Final[pd.DataFrame] = plot_transmittance_and_get_spectral_intensities()
     get_electrical_thermal_powers(spectral_intensities=spectral_intensities)
 
